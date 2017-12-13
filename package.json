@@ -1,0 +1,22 @@
+{
+  "name": "bbl-client",
+  "version": "0.0.1",
+  "description": "A commandline client for the BBL (Bonner Boulder Liga)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "climbing",
+    "cli"
+  ],
+  "author": "Henning Kage",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.12.2",
+    "request": "^2.83.0"
+  }
+}
