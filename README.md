@@ -13,12 +13,12 @@ A simple, NodeJS based, commandline client to access the data for the Bonner Bou
 
     Options:
 
-    -V, --version   output the version number
-    -u, --username  Username
-    -p, --password  Password
-    -h, --help      output usage information
+        -V, --version  output the version number
+        -h, --help     output usage information
 
 
     Commands:
 
-    show <color> <boulder>  Display all ascents of a boulder
+        show <color> <boulder>             Display all ascents of a boulder
+        set [options] <color> <boulder>    Add ascent for a boulder
+        unset [options] <color> <boulder>  Remove ascent for a boulder

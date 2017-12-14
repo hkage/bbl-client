@@ -8,6 +8,8 @@ var prompt = require('co-prompt');
 var request = require('request');
 
 const urlShowBoulder = 'http://climbercontest.de/bbl2017/showBoulder.php';
+const urlUpdateBoulder = 'http://climbercontest.de/bbl2017/scoreNeu.php';
+const urlScorecard = 'http://climbercontest.de/bbl2017/getScorecardShow.php';
 
 const mapping = {
     'orange': [1, 1],
@@ -32,9 +34,7 @@ map = function(color, callback) {
 
 
 program
-    .version('0.0.1')
-    .option('-u, --username', 'Username')
-    .option('-p, --password', 'Password');
+    .version('0.0.1');
 
 program
     .command('show <color> <boulder>')
@@ -50,8 +50,37 @@ program
                         });
                     });
         });
+    });
+
+program
+    .command('set <color> <boulder>')
+    .description('Add ascent for a boulder')
+    .option('-u, --username <user>', 'Login name')
+    .option('-p, --password <pwd>', 'User password')
+    .action(function (color, boulder, command) {
+        map(color, function(color_code, points) {
+            data = {
+                farb_key: color_code, 
+                b: boulder, 
+                wert: points, 
+                user_id: command.username,
+                pwd: command.password
+            }
+            request
+                .post({url: urlUpdateBoulder, form: data},
+                    function(err, httpResponse, body){
+                        console.log(err, httpResponse, body);
+                    });
+        });
+    });
+
+program
+    .command('unset <color> <boulder>')
+    .description('Remove ascent for a boulder')
+    .option('-u, --username <user>', 'Login name')
+    .option('-p, --password <pwd>', 'User password')
+    .action(function (color, boulder, command) {
         
-        //process.exit(0);
     });
 
 program.parse(process.argv);
