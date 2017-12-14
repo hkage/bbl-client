@@ -40,6 +40,14 @@ The `<boulder>` parameter represents the boulder's number used in the climbing g
     John Doe
     Jane Doe
 
+### Add an ascent to a boulder
+
+    $ ./index.js set -u <userid> -p <password> rot 240
+
+### Remove an ascent from a boulder
+
+    $ ./index.js unset -u <userid> -p <password> rot 240
+
 ### Show the current ranking
 
     $ ./index.js ranking
