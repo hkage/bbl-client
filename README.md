@@ -22,3 +22,12 @@ A simple, NodeJS based, commandline client to access the data for the Bonner Bou
         show <color> <boulder>             Display all ascents of a boulder
         set [options] <color> <boulder>    Add ascent for a boulder
         unset [options] <color> <boulder>  Remove ascent for a boulder
+
+## Example
+
+### Displaying all ascents of a boulder
+
+    $ ./index.js show schwarz 99
+
+    John Doe
+    Jane Doe
