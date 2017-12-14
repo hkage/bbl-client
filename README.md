@@ -21,5 +21,4 @@ A simple, NodeJS based, commandline client to access the data for the Bonner Bou
 
     Commands:
 
-    show [color] [boulder]  Display
-    help [cmd]              display help for [cmd]
+    show <color> <boulder>  Display all ascents of a boulder
