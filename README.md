@@ -22,6 +22,8 @@ A simple, NodeJS based, commandline client to access the data for the Bonner Bou
         show <color> <boulder>             Display all ascents of a boulder
         set [options] <color> <boulder>    Add ascent for a boulder
         unset [options] <color> <boulder>  Remove ascent for a boulder
+        ranking                            Display the ranking of the current league
+        scorecard                          Display the scorecard a climber
 
 ## Example
 
