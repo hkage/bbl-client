@@ -57,7 +57,7 @@ program
 program
     .command('set <color> <boulder>')
     .description('Add ascent for a boulder')
-    .option('-u, --username <user>', 'Login name')
+    .option('-u, --userid <userid>', 'User id')
     .option('-p, --password <pwd>', 'User password')
     .action(function (color, boulder, command) {
         map(color, function(color_code, points) {
@@ -79,7 +79,7 @@ program
 program
     .command('unset <color> <boulder>')
     .description('Remove ascent for a boulder')
-    .option('-u, --username <user>', 'Login name')
+    .option('-u, --userid <userid>', 'User id')
     .option('-p, --password <pwd>', 'User password')
     .action(function (color, boulder, command) {
     });
@@ -110,9 +110,9 @@ program
     });
 
 program
-    .command('scorecard')
+    .command('scorecard <userid> <color>')
     .description('Display the scorecard a climber')
-    .action(function () {
+    .action(function (userid, color) {
     });
 
 program.parse(process.argv);
