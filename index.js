@@ -65,14 +65,18 @@ program
                 farb_key: color_code, 
                 b: boulder, 
                 wert: points, 
-                user_id: command.username,
+                user_id: command.userid,
                 pwd: command.password
             }
             request
-                .post({url: urlUpdateBoulder, form: data},
-                    function(err, httpResponse, body){
-                        console.log(err, httpResponse, body);
-                    });
+                .post({url: urlUpdateBoulder, form: data})
+                .on('error', function(err) {
+                    console.log(chalk.red(err));
+                    })
+                .on('response', function(response) {
+                    console.log(chalk.green('OK'));
+                    })
+                ;
         });
     });
 
@@ -82,6 +86,24 @@ program
     .option('-u, --userid <userid>', 'User id')
     .option('-p, --password <pwd>', 'User password')
     .action(function (color, boulder, command) {
+        map(color, function(color_code, points) {
+            data = {
+                farb_key: color_code, 
+                b: boulder, 
+                wert: 0, 
+                user_id: command.userid,
+                pwd: command.password
+            }
+            request
+                .post({url: urlUpdateBoulder, form: data})
+                .on('error', function(err) {
+                    console.log(chalk.red(err));
+                    })
+                .on('response', function(response) {
+                    console.log(chalk.green('OK'));
+                    })
+                ;
+        });
     });
 
 program
