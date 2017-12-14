@@ -94,8 +94,8 @@ program
                     var $ = cheerio.load(body)
                     $('table').each(function(i, elem) {
                         var table = new Table({
-                            head: ['Position', 'Name', 'Points']
-                          , colWidths: [10, 70, 20]
+                            head: ['Pos.', 'Name', 'Points']
+                          , colWidths: [7, 70, 15]
                         });
                         $('tr', $(this)).each(function(i, elem) {
                             var columns = [];
