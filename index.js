@@ -6,10 +6,12 @@ var co = require('co');
 var program = require('commander');
 var prompt = require('co-prompt');
 var request = require('request');
+var Table = require('cli-table');
 
 const urlShowBoulder = 'http://climbercontest.de/bbl2017/showBoulder.php';
 const urlUpdateBoulder = 'http://climbercontest.de/bbl2017/scoreNeu.php';
 const urlScorecard = 'http://climbercontest.de/bbl2017/getScorecardShow.php';
+const urlContest = 'http://climbercontest.de/bbl2017/contest.php';
 
 const mapping = {
     'orange': [1, 1],
@@ -80,7 +82,37 @@ program
     .option('-u, --username <user>', 'Login name')
     .option('-p, --password <pwd>', 'User password')
     .action(function (color, boulder, command) {
-        
+    });
+
+program
+    .command('ranking')
+    .description('Display the ranking of the current league')
+    .action(function () {
+        request
+            .get({url: urlContest},
+                function(err, httpResponse, body){
+                    var $ = cheerio.load(body)
+                    $('table').each(function(i, elem) {
+                        var table = new Table({
+                            head: ['Position', 'Name', 'Points']
+                          , colWidths: [10, 70, 20]
+                        });
+                        $('tr', $(this)).each(function(i, elem) {
+                            var columns = [];
+                            $('td', elem).each(function(i, elem) {
+                              columns[i] = $(this).text();
+                            });
+                            table.push([columns[0], columns[1], columns[2]]);
+                        });
+                        console.log(table.toString());
+                    });
+                });
+    });
+
+program
+    .command('scorecard')
+    .description('Display the scorecard a climber')
+    .action(function () {
     });
 
 program.parse(process.argv);
