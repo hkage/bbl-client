@@ -41,13 +41,20 @@ The `<boulder>` parameter represents the boulder's number used in the climbing g
     John Doe
     Jane Doe
 
+## Login with user userid
+
+Check http://www.bonnerboulderliga.de/Checkclimber.html for the list of climbers and get your user id.
+With the id you can login and store your credentials locally, e.g.:
+
+    $ ./index.js login <userid> <password>
+
 ### Add an ascent to a boulder
 
-    $ ./index.js set -u <userid> -p <password> rot 240
+    $ ./index.js set rot 240
 
 ### Remove an ascent from a boulder
 
-    $ ./index.js unset -u <userid> -p <password> rot 240
+    $ ./index.js unset rot 240
 
 ### Show the current ranking
 
