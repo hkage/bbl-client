@@ -2,9 +2,9 @@
 
 var chalk = require('chalk');
 var cheerio = require('cheerio');
-var co = require('co');
+var fs = require('fs');
 var program = require('commander');
-var prompt = require('co-prompt');
+var nconf = require('nconf');
 var request = require('request');
 var Table = require('cli-table');
 
@@ -34,14 +34,49 @@ map = function(color, callback) {
     }
 };
 
+saveCredentials = function(userid, password) {
+    /**
+     * Method to store the credentials locally.
+     */
+    nconf.use('file', { file: './config.json' });
+    nconf.load();
+    nconf.set('userid', userid);
+    nconf.set('password', password);
+    nconf.save();
+}
+
+getCredentials = function(callback) {
+    /**
+     * Return the credentials from the local config file.
+     */
+    nconf.use('file', { file: './config.json' });
+    nconf.load();
+    fs.readFile('./config.json', function(err, data) {
+        if (err) {
+            console.log(chalk.red('No credentials found. Please login.'));
+        } else {
+            var data = JSON.parse(data.toString());
+            callback(data['userid'], data['password']);
+        }
+    });
+}
 
 program
     .version('0.0.1');
 
+
+program
+    .command('login <userid> <password>')
+    .description('Login with a username and password')
+    .action(function(userid, password) {
+        saveCredentials(userid, password);
+        console.log(chalk.green('Saved credentials'));
+    });
+
 program
     .command('show <color> <boulder>')
     .description('Display all ascents of a boulder')
-    .action(function (color, boulder) {
+    .action(function(color, boulder) {
         map(color, function(color_code, points) {
             request
                 .post({url: urlShowBoulder, form: {farb_key: color_code, boulder: boulder}}, 
@@ -57,59 +92,59 @@ program
 program
     .command('set <color> <boulder>')
     .description('Add ascent for a boulder')
-    .option('-u, --userid <userid>', 'User id')
-    .option('-p, --password <pwd>', 'User password')
-    .action(function (color, boulder, command) {
+    .action(function(color, boulder, command) {
         map(color, function(color_code, points) {
-            data = {
-                farb_key: color_code, 
-                b: boulder, 
-                wert: points, 
-                user_id: command.userid,
-                pwd: command.password
-            }
-            request
-                .post({url: urlUpdateBoulder, form: data})
-                .on('error', function(err) {
-                    console.log(chalk.red(err));
-                    })
-                .on('response', function(response) {
-                    console.log(chalk.green('OK'));
-                    })
-                ;
+            getCredentials(function(userid, password) {
+                data = {
+                    farb_key: color_code, 
+                    b: boulder, 
+                    wert: points, 
+                    user_id: userid,
+                    pwd: password
+                }
+                request
+                    .post({url: urlUpdateBoulder, form: data})
+                    .on('error', function(err) {
+                        console.log(chalk.red(err));
+                        })
+                    .on('response', function(response) {
+                        console.log(chalk.green('OK'));
+                        })
+                    ;
+            });
         });
     });
 
 program
     .command('unset <color> <boulder>')
     .description('Remove ascent for a boulder')
-    .option('-u, --userid <userid>', 'User id')
-    .option('-p, --password <pwd>', 'User password')
-    .action(function (color, boulder, command) {
+    .action(function(color, boulder, command) {
         map(color, function(color_code, points) {
-            data = {
-                farb_key: color_code, 
-                b: boulder, 
-                wert: 0, 
-                user_id: command.userid,
-                pwd: command.password
-            }
-            request
-                .post({url: urlUpdateBoulder, form: data})
-                .on('error', function(err) {
-                    console.log(chalk.red(err));
-                    })
-                .on('response', function(response) {
-                    console.log(chalk.green('OK'));
-                    })
-                ;
+            getCredentials(function(userid, password) {
+                data = {
+                    farb_key: color_code, 
+                    b: boulder, 
+                    wert: 0, 
+                    user_id: userid,
+                    pwd: password
+                }
+                request
+                    .post({url: urlUpdateBoulder, form: data})
+                    .on('error', function(err) {
+                        console.log(chalk.red(err));
+                        })
+                    .on('response', function(response) {
+                        console.log(chalk.green('OK'));
+                        })
+                    ;
+            });
         });
     });
 
 program
     .command('ranking')
     .description('Display the ranking of the current league')
-    .action(function () {
+    .action(function() {
         request
             .get({url: urlContest},
                 function(err, httpResponse, body){
@@ -134,7 +169,7 @@ program
 program
     .command('scorecard <userid> <color>')
     .description('Display the scorecard a climber')
-    .action(function (userid, color) {
+    .action(function(userid, color) {
     });
 
 program.parse(process.argv);
