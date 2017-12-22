@@ -8,10 +8,10 @@ var prompt = require('co-prompt');
 var request = require('request');
 var Table = require('cli-table');
 
-const urlShowBoulder = 'http://climbercontest.de/bbl2017/showBoulder.php';
-const urlUpdateBoulder = 'http://climbercontest.de/bbl2017/scoreNeu.php';
-const urlScorecard = 'http://climbercontest.de/bbl2017/getScorecardShow.php';
-const urlContest = 'http://climbercontest.de/bbl2017/contest.php';
+const urlShowBoulder = 'https://climbercontest.de/bbl2017/showBoulder.php';
+const urlUpdateBoulder = 'https://climbercontest.de/bbl2017/scoreNeu.php';
+const urlScorecard = 'https://climbercontest.de/bbl2017/getScorecardShow.php';
+const urlContest = 'https://climbercontest.de/bbl2017/contest.php';
 
 const mapping = {
     'orange': [1, 1],
