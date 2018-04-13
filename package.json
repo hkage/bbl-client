@@ -1,6 +1,6 @@
 {
   "name": "bbl-client",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "A commandline client for the BBL (Bonner Boulder Liga)",
   "main": "index.js",
   "scripts": {

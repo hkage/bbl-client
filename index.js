@@ -62,7 +62,7 @@ getCredentials = function(callback) {
 }
 
 program
-    .version('0.0.1');
+    .version('0.1');
 
 
 program
