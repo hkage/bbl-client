@@ -61,6 +61,24 @@ getCredentials = function(callback) {
     });
 }
 
+getBoulderSummiters = function(color, boulder, callback) {
+    /**
+     * Return all list of climbers that summitted a certain boulder.
+     */
+    map(color, function(color_code, points) {
+        request
+            .post({url: urlShowBoulder, form: {farb_key: color_code, boulder: boulder}}, 
+                function(err, httpResponse, body){
+                    var climbers = [];
+                    var $ = cheerio.load(body);
+                    $('.nameBoulder').each(function(i, elem) {
+                        climbers.push($(this).text());
+                    });
+                    callback(climbers);
+                });
+    });
+}
+
 program
     .version('0.1');
 
@@ -77,15 +95,10 @@ program
     .command('show <color> <boulder>')
     .description('Display all ascents of a boulder')
     .action(function(color, boulder) {
-        map(color, function(color_code, points) {
-            request
-                .post({url: urlShowBoulder, form: {farb_key: color_code, boulder: boulder}}, 
-                    function(err, httpResponse, body){
-                        var $ = cheerio.load(body)
-                        $('.nameBoulder').each(function(i, elem) {
-                            console.log($(this).text());
-                        });
-                    });
+        getBoulderSummiters(color, boulder, function(summitters) {
+            summitters.forEach(function(element) {
+                console.log(element);
+            });
         });
     });
 
@@ -167,9 +180,18 @@ program
     });
 
 program
-    .command('scorecard <userid> <color>')
+    .command('scorecard <username> <color>')
     .description('Display the scorecard a climber')
-    .action(function(userid, color) {
+    .action(function(username, color) {
+        var boulders = [];
+        for (let no = 1; no < 21; no++) {
+            getBoulderSummiters(color, no, function(climbers) {
+                if(climbers.indexOf(username) != -1) {
+                    boulders.push(no);
+                }
+            });
+          }
+        console.log(boulders);
     });
 
 program.parse(process.argv);
